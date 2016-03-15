@@ -16,10 +16,13 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
+from app_history.views import HistoryView, UserView
 from blog.views import blog_page, blog_api
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^blog/', blog_page),
-    url(r'^api/blog', blog_api.as_view())
+    url(r'^api/blog', blog_api.as_view()),
+    url(r'^api/history', HistoryView.as_view()),
+    url(r'^api/user', UserView.as_view())
 ]
