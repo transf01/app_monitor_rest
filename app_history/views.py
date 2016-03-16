@@ -20,11 +20,8 @@ class HistoryView(GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin
 
     def get_serializer(self, *args, **kwargs):
         if "data" in kwargs:
-            data = kwargs["data"]
-
-            if isinstance(data, list):
+            if isinstance( kwargs["data"], list):
                 kwargs["many"] = True
-
         return super(HistoryView, self).get_serializer(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
@@ -42,3 +39,14 @@ class UserView(GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin):
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+
+class HistoryByUserView(GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin,):
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        return History.objects.filter(**self.kwargs)
+
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
