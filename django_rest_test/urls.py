@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
-from app_history.views import HistoryView, UserView, HistoryByUserView
+from app_history.views import HistoryView, UserView, HistoryByUserView, StatView
 from blog.views import blog_page, blog_api
 
 urlpatterns = [
@@ -27,4 +27,7 @@ urlpatterns = [
     url(r'^api/user$', UserView.as_view()),
     url(r'^api/history/(?P<uuid>.+)/date/(?P<start_date>.+)$', HistoryByUserView.as_view()),
     url(r'^api/history/(?P<uuid>.+)$', HistoryByUserView.as_view()),
+    url(r'^api/stat$', StatView.as_view()),
+    url(r'^api/stat/(?P<uuid>.+)/date/(?P<start_date>.+)$', StatView.as_view()),
+    url(r'^api/stat/(?P<uuid>.+)$', StatView.as_view()),
 ]
