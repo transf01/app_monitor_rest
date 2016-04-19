@@ -42,6 +42,7 @@ class UserView(GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin):
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
+
 class HistoryByUserView(GenericAPIView, mixins.ListModelMixin):
     serializer_class = HistorySerializer
 

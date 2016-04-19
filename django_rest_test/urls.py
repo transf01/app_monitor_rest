@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/history$', HistoryView.as_view()),
     url(r'^api/user$', UserView.as_view()),
+    url(r'^api/history/(?P<uuid>.+)/date/(?P<start_date>.+)/time/(?P<start_time>.+)$', HistoryByUserView.as_view()),
     url(r'^api/history/(?P<uuid>.+)/date/(?P<start_date>.+)$', HistoryByUserView.as_view()),
     url(r'^api/history/(?P<uuid>.+)$', HistoryByUserView.as_view()),
     url(r'^api/stat$', StatView.as_view()),
