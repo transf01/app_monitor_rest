@@ -57,7 +57,7 @@ class LastHistoryView(GenericAPIView, mixins.ListModelMixin):
     serializer_class = HistorySerializer
 
     def get_queryset(self):
-        return History.objects.raw('select * from '+History._meta.db_table+' group by uuid')
+        return History.objects.raw('select * from '+History._meta.db_table+' group by uuid_id')
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
