@@ -51,6 +51,17 @@ class HistoryByUserView(GenericAPIView, mixins.ListModelMixin):
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
+
+class LastHistoryView(GenericAPIView, mixins.ListModelMixin):
+    serializer_class = HistorySerializer
+
+    def get_queryset(self):
+        return History.objects.raw('select * from '+History._meta.db_table+' group by uuid')
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+
 class TotalUseField(serializers.CharField):
     def to_representation(self, value):
         return '%s' %(str(datetime.timedelta(seconds=value)))
