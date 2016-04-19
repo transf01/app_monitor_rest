@@ -1,8 +1,14 @@
 from django.db import models
 
 # Create your models here.
+class User(models.Model):
+    uuid = models.CharField(max_length=256, primary_key=True)
+    name = models.CharField(max_length=256)
+    cellphone = models.CharField(max_length=15)
+
+
 class History(models.Model):
-    uuid = models.CharField(max_length=256)
+    uuid = models.ForeignKey(User, on_delete=models.CASCADE)
     app_name = models.CharField(max_length=256)
     package_name = models.CharField(max_length=256)
     start_date = models.DateField()
@@ -13,7 +19,3 @@ class History(models.Model):
         unique_together = ('uuid', 'start_date', 'start_time')
 
 
-class User(models.Model):
-    uuid = models.CharField(max_length=256)
-    name = models.CharField(max_length=256)
-    cellphone = models.CharField(max_length=15)
