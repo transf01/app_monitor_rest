@@ -5,6 +5,7 @@ class User(models.Model):
     uuid = models.CharField(max_length=256, primary_key=True)
     name = models.CharField(max_length=256)
     cellphone = models.CharField(max_length=15)
+    experiment_code = models.IntegerField()
 
 
 class History(models.Model):
