@@ -1,11 +1,13 @@
-import datetime
 from django.db.models import Sum, Count
 from django.shortcuts import render
 from rest_framework.generics import GenericAPIView
 from rest_framework import serializers, mixins
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from datetime import datetime, timedelta
 
 # Create your views here.
-from app_history.models import History, User
+from app_history.models import History, User, ExcludedPackage
 
 
 class HistorySerializer(serializers.ModelSerializer):
@@ -57,7 +59,7 @@ class LastHistoryView(GenericAPIView, mixins.ListModelMixin):
     serializer_class = HistorySerializer
 
     def get_queryset(self):
-        return History.objects.raw('select * from '+History._meta.db_table+' group by uuid_id')
+        return History.objects.raw('select * from '+History._meta.db_table+' group by uuid_id order by start_date')
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -65,7 +67,7 @@ class LastHistoryView(GenericAPIView, mixins.ListModelMixin):
 
 class TotalUseField(serializers.CharField):
     def to_representation(self, value):
-        return '%s' %(str(datetime.timedelta(seconds=value)))
+        return '%s' %(str(timedelta(seconds=value)))
 
 class StatSerializer(serializers.Serializer):
     uuid = serializers.CharField(max_length=256)
@@ -83,3 +85,41 @@ class StatView(GenericAPIView, mixins.ListModelMixin):
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+
+
+class StatPeriodView(APIView):
+    def get(self, request, *args, **kwargs):
+        start_date = datetime.strptime(kwargs['start_date'], '%Y-%m-%d')
+        end_date = start_date+ timedelta(days=7)
+        apps = History.objects.filter(uuid=kwargs['uuid'], start_date__range=(start_date, end_date)).values('app_name').annotate(total_use=Sum('use_time')).order_by('-total_use')[0:5]
+        app_datas = []
+        print(apps)
+        for app in apps:
+            app_data = {"type" :" column"}
+            app_data["name"] = app['app_name']
+            use_times = []
+            for i in range(0,7):
+                date = start_date + timedelta(days=i)
+                history = History.objects.filter(uuid=kwargs['uuid'], start_date=date, app_name=app['app_name']).values('app_name').annotate(total_use=Sum('use_time'))
+                if len(history) > 0:
+                    use_times.append(history[0]['total_use'])
+                else:
+                    use_times.append(0)
+            app_data['data'] = use_times
+            app_datas.append(app_data)
+        return Response({"series":app_datas})
+
+
+class ExcludedPackageSerializer(serializers.Serializer):
+    package_name = serializers.CharField(max_length=256)
+
+
+class ExcludedPackageView(GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin):
+    queryset = ExcludedPackage.objects.all()
+    serializer_class = ExcludedPackageSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)

@@ -16,7 +16,8 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
-from app_history.views import HistoryView, UserView, HistoryByUserView, StatView, LastHistoryView
+from app_history.views import HistoryView, UserView, HistoryByUserView, StatView, LastHistoryView, StatPeriodView, \
+    ExcludedPackageView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -27,6 +28,8 @@ urlpatterns = [
     url(r'^api/history/(?P<uuid>.+)$', HistoryByUserView.as_view()),
     url(r'^api/stat$', StatView.as_view()),
     url(r'^api/stat/(?P<uuid>.+)/date/(?P<start_date>.+)$', StatView.as_view()),
+    url(r'^api/stat_graph/(?P<uuid>.+)/date/(?P<start_date>.+)$', StatPeriodView.as_view()),
     url(r'^api/stat/(?P<uuid>.+)$', StatView.as_view()),
     url(r'^api/last_history/', LastHistoryView.as_view()),
+    url(r'^api/excluded_package/', ExcludedPackageView.as_view()),
 ]

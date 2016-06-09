@@ -20,3 +20,5 @@ class History(models.Model):
         unique_together = ('uuid', 'start_date', 'start_time')
 
 
+class ExcludedPackage(models.Model):
+    package_name = models.CharField(max_length=256)
