@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+from django.forms import Field
+from django.utils.translation import ugettext_lazy
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -39,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_swagger',
-    'app_history'
+    'app_history',
+    'survey'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -82,6 +85,11 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'survey': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+      #  'NAME': os.path.join(BASE_DIR, 'rest_test.sqlite3'),
     }
 }
 
@@ -109,13 +117,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
@@ -123,3 +127,34 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+
+]
+
+
+# media
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = '/media/'
+
+
+
+# email
+support_email = "perception24@naver.com"
+
+
+Field.default_error_messages = {
+    'required': ugettext_lazy("입력해주세요!"),
+}
+
+# Make filepaths relative to settings.
+ROOT = os.path.dirname(os.path.abspath(__file__))
+path = lambda *a: os.path.join(ROOT, *a)
+
+
+ADMINS = (
+    # ('Your Name', 'your_email@example.com'),
+)
+
+MANAGERS = ADMINS
+SITE_ID = 1

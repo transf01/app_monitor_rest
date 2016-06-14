@@ -15,9 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-
 from app_history.views import HistoryView, UserView, HistoryByUserView, StatView, LastHistoryView, StatPeriodView, \
     ExcludedPackageView
+
+from django_rest_test import settings
+from survey import views
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -32,4 +35,9 @@ urlpatterns = [
     url(r'^api/stat/(?P<uuid>.+)$', StatView.as_view()),
     url(r'^api/last_history/', LastHistoryView.as_view()),
     url(r'^api/excluded_package/', ExcludedPackageView.as_view()),
+
+    url(r'^survey/$', views.Index),
+    url(r'^survey/(?P<id>\d+)/$', views.SurveyDetail),
+    url(r'^survey/confirm/(?P<uuid>\w+)/$', views.Confirm),
+    url(r'^privacy/$', views.privacy),
 ]
