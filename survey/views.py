@@ -9,7 +9,7 @@ import datetime
 from django_rest_test import settings
 
 from survey.models import Question, Survey, Category, AnswerRadio
-from survey.forms import ResponseForm, RegistrationForm
+from survey.forms import ResponseForm
 
 from django.contrib.auth.models import User
 
@@ -21,6 +21,7 @@ def Index(request):
 
 
 def SurveyDetail(request, id):
+    global user_id
     survey = Survey.objects.get(id=id)
     category_items = Category.objects.filter(survey=survey)
     categories = [c.name for c in category_items]
@@ -36,9 +37,9 @@ def SurveyDetail(request, id):
         form = ResponseForm(survey=survey)
         # print(form)
     # TODO sort by category
-        received_uuid = request.GET.get('r_uuid')  ##UUID 받기
-        print (received_uuid)   ##UUID 받아서 찍기
-    return render(request, 'survey/survey.html', {'response_form': form, 'survey': survey, 'categories': categories, 'received_uuid': received_uuid})
+        user_id = request.GET.get('user_id')  ##UUID 받기
+        print (user_id)   ##UUID 받아서 찍기
+    return render(request, 'survey/survey.html', {'response_form': form, 'survey': survey, 'categories': categories, 'user_id': user_id})
 
 
 def Confirm(request, uuid):
@@ -50,21 +51,21 @@ def privacy(request):
     return render(request, 'survey/privacy.html')
 
 
-## registration
-def register_page(request):
-    if request.method == 'POST':
-        form = RegistrationForm(request.POST)
-        if form.is_valid():
-            user = User.objects.create_user(
-                username=form.cleaned_data['username'],
-                email=form.cleaned_data['email'],
-                password=form.cleaned_data['password1']
-            )
-            return HttpResponseRedirect('/login/')
-    else:
-        form = RegistrationForm()
-
-    variables = RequestContext(request, {
-        'form': form
-    })
-    return render_to_response('registration/register.html', variables)
+# ## registration
+# def register_page(request):
+#     if request.method == 'POST':
+#         form = RegistrationForm(request.POST)
+#         if form.is_valid():
+#             user = User.objects.create_user(
+#                 username=form.cleaned_data['username'],
+#                 email=form.cleaned_data['email'],
+#                 password=form.cleaned_data['password1']
+#             )
+#             return HttpResponseRedirect('/login/')
+#     else:
+#         form = RegistrationForm()
+#
+#     variables = RequestContext(request, {
+#         'form': form
+#     })
+#     return render_to_response('registration/register.html', variables)
