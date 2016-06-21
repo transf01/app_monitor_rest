@@ -6,6 +6,7 @@ class User(models.Model):
     name = models.CharField(max_length=256)
     cellphone = models.CharField(max_length=15)
     experiment_code = models.IntegerField()
+    experiment_start_date = models.DateField()
 
 
 class History(models.Model):
@@ -22,3 +23,7 @@ class History(models.Model):
 
 class ExcludedPackage(models.Model):
     package_name = models.CharField(max_length=256)
+
+class ExperimentInfo(models.Model):
+    type = models.CharField(max_length=15, primary_key=True)
+    period = models.IntegerField()

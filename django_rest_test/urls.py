@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from app_history.views import HistoryView, UserView, HistoryByUserView, StatView, LastHistoryView, StatPeriodView, \
-    ExcludedPackageView
+    ExcludedPackageView, UserDetailView, ExperimentInfoView, ExperimentInfoDetailView
 
 from django_rest_test import settings
 from survey import views
@@ -24,8 +24,9 @@ from survey import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^api/history$', HistoryView.as_view()),
-    url(r'^api/user$', UserView.as_view()),
+    url(r'^api/history/$', HistoryView.as_view()),
+    url(r'^api/user/$', UserView.as_view()),
+    url(r'^api/user/(?P<uuid>.+)$', UserDetailView.as_view()),
     url(r'^api/history/(?P<uuid>.+)/date/(?P<start_date>.+)/time/(?P<start_time>.+)$', HistoryByUserView.as_view()),
     url(r'^api/history/(?P<uuid>.+)/date/(?P<start_date>.+)$', HistoryByUserView.as_view()),
     url(r'^api/history/(?P<uuid>.+)$', HistoryByUserView.as_view()),
@@ -35,6 +36,8 @@ urlpatterns = [
     url(r'^api/stat/(?P<uuid>.+)$', StatView.as_view()),
     url(r'^api/last_history/', LastHistoryView.as_view()),
     url(r'^api/excluded_package/', ExcludedPackageView.as_view()),
+    url(r'^api/exp_info/$', ExperimentInfoView.as_view()),
+    url(r'^api/exp_info/(?P<type>.+)$', ExperimentInfoDetailView.as_view()),
 
     url(r'^survey/$', views.Index),
     url(r'^survey/(?P<id>\d+)/$', views.SurveyDetail),

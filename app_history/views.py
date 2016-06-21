@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from datetime import datetime, timedelta
 
 # Create your views here.
-from app_history.models import History, User, ExcludedPackage
+from app_history.models import History, User, ExcludedPackage, ExperimentInfo
 
 
 class HistorySerializer(serializers.ModelSerializer):
@@ -43,6 +43,15 @@ class UserView(GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin):
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+
+
+class UserDetailView(GenericAPIView, mixins.RetrieveModelMixin):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = ('uuid')
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
 
 
 class HistoryByUserView(GenericAPIView, mixins.ListModelMixin):
@@ -110,9 +119,10 @@ class StatPeriodView(APIView):
         return Response({"series":app_datas})
 
 
-class ExcludedPackageSerializer(serializers.Serializer):
-    package_name = serializers.CharField(max_length=256)
-
+class ExcludedPackageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExcludedPackage
+        exclude = ('id',)
 
 class ExcludedPackageView(GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin):
     queryset = ExcludedPackage.objects.all()
@@ -123,3 +133,35 @@ class ExcludedPackageView(GenericAPIView, mixins.ListModelMixin, mixins.CreateMo
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+
+
+class ExperimentInfoSerializier(serializers.ModelSerializer):
+    class Meta:
+        model = ExperimentInfo
+
+class ExperimentInfoDetailView(GenericAPIView, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.CreateModelMixin):
+    queryset = ExperimentInfo.objects.all()
+    serializer_class = ExperimentInfoSerializier
+    lookup_field = ('type')
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+class ExperimentInfoView(GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin):
+    queryset = ExperimentInfo.objects.all()
+    serializer_class = ExperimentInfoSerializier
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+
