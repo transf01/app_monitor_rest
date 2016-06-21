@@ -4,6 +4,7 @@ from survey.models import Question, Category, Survey, Response, AnswerText, Answ
 from django.utils.safestring import mark_safe
 import uuid
 from django.template import Context, RequestContext
+from django.shortcuts import render
 
 
 # blatantly stolen from
@@ -12,23 +13,23 @@ class HorizontalRadioRenderer(forms.RadioSelect.renderer):
     def render(self):
         return mark_safe(u'\n'.join([u'%s\n' % w for w in self]))
 
-
 class ResponseForm(models.ModelForm):
     class Meta:
         model = Response
-        fields = ('interviewer', 'interviewee', 'conditions', 'comments')
+        fields = ('interviewer', 'interviewee', 'conditions', 'comments', 'user_id')
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, data=None, **kwargs):
         # expects a survey object to be passed in initially
         survey = kwargs.pop('survey')
         self.survey = survey
         super(ResponseForm, self).__init__(*args, **kwargs)
         self.uuid = random_uuid = uuid.uuid4().hex  ## uuid random 으로 만들기
-
-
+        self.user_id = 324234234
+        # self.user_id = kwargs[] ## user_id 받아와야 함
+        # print(kwargs)
         # add a field for each survey question, corresponding to the question
         # type as appropriate.
-        data = kwargs.get('data')
+        data = data
         for q in survey.questions():
             if q.question_type == Question.TEXT:
                 self.fields["question_%d" % q.pk] = forms.CharField(label=q.text,
@@ -59,7 +60,7 @@ class ResponseForm(models.ModelForm):
                 self.fields["question_%d" % q.pk].required = True
                 self.fields["question_%d" % q.pk].widget.attrs["class"] = "required"
             else:
-                self.fields["question_%d" % q.pk].required = False
+                self.fields["question_%d" % q.pk].required = True
 
             # add the category as a css class, and add it as a data attribute
             # as well (this is used in the template to allow sorting the
@@ -76,12 +77,12 @@ class ResponseForm(models.ModelForm):
             if data:
                 self.fields["question_%d" % q.pk].initial = data.get('question_%d' % q.pk)
 
-
     def save(self, commit=True):
         # save the response object
         response = super(ResponseForm, self).save(commit=False)
         response.survey = self.survey
         response.interview_uuid = self.uuid
+        response.user_id = self.user_id  #user_id 저장
         response.save()
 
         # create an answer object for each question and associate it with this

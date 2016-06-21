@@ -85,15 +85,17 @@ class Response(models.Model):
     survey = models.ForeignKey(Survey)
 
     # interviewer = request.GET.get('user_id')  ##user_id 받기
-    interviewer = models.CharField('이름', max_length=400)
-    interviewee = models.CharField('연락처', max_length=400)
-    conditions = models.CharField('성별', max_length=400)
-    comments = models.CharField('나이', max_length=400)
+    interviewer = models.CharField('이름', max_length=400, blank=True, null=True)
+    interviewee = models.CharField('연락처', max_length=400, blank=True, null=True)
+    conditions = models.CharField('성별', max_length=400, blank=True, null=True)
+    comments = models.CharField('나이', max_length=400, blank=True, null=True)
     interview_uuid = models.CharField("Interview unique identifier", max_length=36)
+    user_id = models.CharField("사용자ID", max_length=400, blank=True, null=True)  # user_id 폼
 
 
     def __str__(self):
-        return "response %s" % self.interview_uuid
+        return "response %s" % self.interview_uuid, self.user_id
+        # return "response %s" % self.user_id
 
 
 class AnswerBase(models.Model):

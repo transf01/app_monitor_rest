@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_swagger',
     'app_history',
-    'survey'
+    'survey',
 ]
 
 MIDDLEWARE_CLASSES = [

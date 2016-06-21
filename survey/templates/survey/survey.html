@@ -61,46 +61,53 @@
       <div>
         <form action="/survey/{{survey.id}}/" method="post">{% csrf_token %}
 
-          <h3 class="collapsible" id="response_metadata">인적사항<span></span></h3>
-          <div class="category-container">
-
-          <div class="field-wrapper question-required">
-            <span class="asterix"></span>{{ response_form.interviewer.label_tag }}
-            <span class="form-help-text">{{ response_form.interviewer.help_text}}</span>
-            <div class="form-field-body">
-              {{ response_form.interviewer }}
+            <div class="field-wrapper question-required">
+                <div class="form-field-body">
+                  user_id={{ response_form.user_id }}
+                </div>
             </div>
-                  {{ response_form.interviewer.errors }}
-          </div>
 
-          <div class="field-wrapper question-required">
-            <span class="asterix"></span>{{ response_form.interviewee.label_tag }}
-            <span class="form-help-text">{{ response_form.interviewee.help_text}}</span>
-            <div class="form-field-body">
-              {{ response_form.interviewee }}
-            </div>
-                  {{ response_form.interviewee.errors }}
-          </div>
 
-          <div class="field-wrapper">
-            {{ response_form.conditions.label_tag }}
-            <span class="form-help-text">{{ response_form.conditions.help_text}}</span>
-            <div class="form-field-body">
-              {{ response_form.conditions }}
-            </div>
-                  {{ response_form.conditions.errors }}
-          </div>
-
-          <div class="field-wrapper">
-            {{ response_form.comments.label_tag }}
-            <span class="form-help-text">{{ response_form.comments.help_text}}</span>
-            <div class="form-field-body">
-              {{ response_form.comments }}
-            </div>
-                  {{ response_form.comments.errors }}
-          </div>
-
-        </div>
+{#          <h3 class="collapsible" id="response_metadata">인적사항<span></span></h3>#}
+{#          <div class="category-container">#}
+{##}
+{#          <div class="field-wrapper question-required">#}
+{#            <span class="asterix"></span>{{ response_form.interviewer.label_tag }}#}
+{#            <span class="form-help-text">{{ response_form.interviewer.help_text}}</span>#}
+{#            <div class="form-field-body">#}
+{#              {{ response_form.interviewer }}#}
+{#            </div>#}
+{#                  {{ response_form.interviewer.errors }}#}
+{#          </div>#}
+{##}
+{#          <div class="field-wrapper question-required">#}
+{#            <span class="asterix"></span>{{ response_form.interviewee.label_tag }}#}
+{#            <span class="form-help-text">{{ response_form.interviewee.help_text}}</span>#}
+{#            <div class="form-field-body">#}
+{#              {{ response_form.interviewee }}#}
+{#            </div>#}
+{#                  {{ response_form.interviewee.errors }}#}
+{#          </div>#}
+{##}
+{#          <div class="field-wrapper">#}
+{#            {{ response_form.conditions.label_tag }}#}
+{#            <span class="form-help-text">{{ response_form.conditions.help_text}}</span>#}
+{#            <div class="form-field-body">#}
+{#              {{ response_form.conditions }}#}
+{#            </div>#}
+{#                  {{ response_form.conditions.errors }}#}
+{#          </div>#}
+{##}
+{#          <div class="field-wrapper">#}
+{#            {{ response_form.comments.label_tag }}#}
+{#            <span class="form-help-text">{{ response_form.comments.help_text}}</span>#}
+{#            <div class="form-field-body">#}
+{#              {{ response_form.comments }}#}
+{#            </div>#}
+{#                  {{ response_form.comments.errors }}#}
+{#          </div>#}
+{##}
+{#        </div>#}
 
           <ol class="survey-questions" style="padding-left: 0px;">
           {% for category in categories %}

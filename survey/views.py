@@ -17,7 +17,7 @@ from django.contrib.auth.models import User
 def Index(request):
     # received_uuid = request.GET.get('r_uuid')  ##UUID 받기
     # print (received_uuid)   ##UUID 받아서 찍기
-    return render(request, 'survey/index.html') #, {'received_uuid': received_uuid})
+    return render(request, 'survey/index.html')  # , {'received_uuid': received_uuid})
 
 
 def SurveyDetail(request, id):
@@ -35,11 +35,13 @@ def SurveyDetail(request, id):
             return HttpResponseRedirect("/survey/confirm/%s" % response.interview_uuid)
     else:
         form = ResponseForm(survey=survey)
+
         # print(form)
-    # TODO sort by category
+        # TODO sort by category
         user_id = request.GET.get('user_id')  ##UUID 받기
-        print (user_id)   ##UUID 받아서 찍기
-    return render(request, 'survey/survey.html', {'response_form': form, 'survey': survey, 'categories': categories, 'user_id': user_id})
+        print(user_id)  ##UUID 받아서 찍기
+    return render(request, 'survey/survey.html',
+                  {'response_form': form, 'survey': survey, 'categories': categories, 'user_id': user_id})
 
 
 def Confirm(request, uuid):
@@ -49,7 +51,6 @@ def Confirm(request, uuid):
 
 def privacy(request):
     return render(request, 'survey/privacy.html')
-
 
 # ## registration
 # def register_page(request):
