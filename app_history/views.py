@@ -139,7 +139,7 @@ class ExperimentInfoSerializier(serializers.ModelSerializer):
     class Meta:
         model = ExperimentInfo
 
-class ExperimentInfoDetailView(GenericAPIView, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.CreateModelMixin):
+class ExperimentInfoDetailView(GenericAPIView, mixins.RetrieveModelMixin, mixins.UpdateModelMixin):
     queryset = ExperimentInfo.objects.all()
     serializer_class = ExperimentInfoSerializier
     lookup_field = ('type')
@@ -150,8 +150,6 @@ class ExperimentInfoDetailView(GenericAPIView, mixins.RetrieveModelMixin, mixins
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
 
 class ExperimentInfoView(GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin):
     queryset = ExperimentInfo.objects.all()

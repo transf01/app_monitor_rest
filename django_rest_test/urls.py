@@ -41,6 +41,6 @@ urlpatterns = [
 
     url(r'^survey/$', views.Index),
     url(r'^survey/(?P<id>\d+)/$', views.SurveyDetail),
-    url(r'^survey/confirm/(?P<uuid>\w+)/$', views.Confirm),
+    url(r'^survey/confirm/(?P<survey_id>\w+)/$', views.Confirm),
     url(r'^privacy/$', views.privacy),
 ]

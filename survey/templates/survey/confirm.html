@@ -32,8 +32,12 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script language="JavaScript">
-        function confirm() {
-            window.android.confirm();
+        function confirmPresurvey() {
+            window.android.confirmPresurvey();
+        }
+
+        function confirmPostsurvey() {
+            window.android.confirmPostsurvey();
         }
     </script>
   </head>
@@ -57,12 +61,18 @@
     <!-- 본문 영역 시작, 각 페이지의 컨텐츠 입니다.-->
     <div class="container">
             <div class="page-header">
-        <h2>설문에 참여해 주셔서 감사합니다!</h2>
+        <h2>{% if survey_id == '1' %}사전 {% else %}사후 {% endif %}설문에 참여해 주셔서 감사합니다!</h2>
       </div>
-    <p>확인 번호는 {{uuid}} 입니다.</p>
-    <p>this to refer to your response.</p>
+
     <p>질문이 있으면 연제든지 연락해주세요. e-mail {{ email }} </p>
-{#Thanks! Your confirmation code is {{uuid}}. Use this to refer to your response. In case you have any questions, contact {{ email }}#}
+    <p>
+        {% if survey_id == '1' %}
+            <input type="button" value="확인" onclick="confirmPresurvey()" />
+        {% else %}
+            <input type="button" value="확인" onclick="confirmPostsurvey()" />
+        {% endif %}
+    </p>
+
     </div>
    <!-- 본문 영역 끝-->
     <!-- Bootstrap core JavaScript
@@ -73,6 +83,6 @@
     <script src="/static/js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="/static/js/ie10-viewport-bug-workaround.js"></script>
-    <input type="button" value="확인" onclick="confirm()" />
+
   </body>
 </html>

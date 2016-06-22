@@ -22,7 +22,7 @@ class History(models.Model):
 
 
 class ExcludedPackage(models.Model):
-    package_name = models.CharField(max_length=256)
+    package_name = models.CharField(max_length=256, unique=True)
 
 class ExperimentInfo(models.Model):
     type = models.CharField(max_length=15, primary_key=True)

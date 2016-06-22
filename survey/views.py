@@ -30,7 +30,7 @@ def SurveyDetail(request, id):
 
         if form.is_valid():
             response = form.save()
-            return HttpResponseRedirect("/survey/confirm/%s" % response.interview_uuid)
+            return HttpResponseRedirect("/survey/confirm/%s" % id)
     else:
         form = ResponseForm(initial={'user_id': request.GET.get('user_id')}, survey=survey)
 
@@ -42,9 +42,9 @@ def SurveyDetail(request, id):
                   {'response_form': form, 'survey': survey, 'categories': categories })
 
 
-def Confirm(request, uuid):
+def Confirm(request, survey_id):
     email = settings.support_email
-    return render(request, 'survey/confirm.html', {'uuid': uuid, "email": email})
+    return render(request, 'survey/confirm.html', {'survey_id': survey_id, "email": email})
 
 
 def privacy(request):
