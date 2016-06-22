@@ -21,27 +21,25 @@ def Index(request):
 
 
 def SurveyDetail(request, id):
-    global user_id
     survey = Survey.objects.get(id=id)
     category_items = Category.objects.filter(survey=survey)
     categories = [c.name for c in category_items]
-    # print('categories for this survey:')
-    # print(categories)
 
     if request.method == 'POST':
         form = ResponseForm(request.POST, survey=survey)
+
         if form.is_valid():
             response = form.save()
             return HttpResponseRedirect("/survey/confirm/%s" % response.interview_uuid)
     else:
-        form = ResponseForm(survey=survey)
+        form = ResponseForm(initial={'user_id': request.GET.get('user_id')}, survey=survey)
 
         # print(form)
         # TODO sort by category
-        user_id = request.GET.get('user_id')  ##UUID 받기
-        print(user_id)  ##UUID 받아서 찍기
+
+    print(form)
     return render(request, 'survey/survey.html',
-                  {'response_form': form, 'survey': survey, 'categories': categories, 'user_id': user_id})
+                  {'response_form': form, 'survey': survey, 'categories': categories })
 
 
 def Confirm(request, uuid):

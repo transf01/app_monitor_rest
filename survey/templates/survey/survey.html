@@ -59,15 +59,10 @@
       <p>{{survey.description|safe}}</p>
 
       <div>
+
         <form action="/survey/{{survey.id}}/" method="post">{% csrf_token %}
 
-            <div class="field-wrapper question-required">
-                <div class="form-field-body">
-                  user_id={{ response_form.user_id }}
-                </div>
-            </div>
-
-
+            {{ response_form.user_id.as_hidden }}
 {#          <h3 class="collapsible" id="response_metadata">인적사항<span></span></h3>#}
 {#          <div class="category-container">#}
 {##}

@@ -83,14 +83,8 @@ class Response(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     survey = models.ForeignKey(Survey)
-
-    # interviewer = request.GET.get('user_id')  ##user_id 받기
-    interviewer = models.CharField('이름', max_length=400, blank=True, null=True)
-    interviewee = models.CharField('연락처', max_length=400, blank=True, null=True)
-    conditions = models.CharField('성별', max_length=400, blank=True, null=True)
-    comments = models.CharField('나이', max_length=400, blank=True, null=True)
     interview_uuid = models.CharField("Interview unique identifier", max_length=36)
-    user_id = models.CharField("사용자ID", max_length=400, blank=True, null=True)  # user_id 폼
+    user_id = models.CharField("사용자ID", max_length=256)  # user_id 폼
 
 
     def __str__(self):
