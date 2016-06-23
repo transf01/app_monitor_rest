@@ -39,6 +39,8 @@ urlpatterns = [
     url(r'^api/exp_info/$', ExperimentInfoView.as_view()),
     url(r'^api/exp_info/(?P<type>.+)$', ExperimentInfoDetailView.as_view()),
 
+    url(r'^graph/$', views.stat_grapth),
+    url(r'^graph/sample$', views.sample),
     url(r'^survey/$', views.Index),
     url(r'^survey/(?P<id>\d+)/$', views.SurveyDetail),
     url(r'^survey/confirm/(?P<survey_id>\w+)/$', views.Confirm),

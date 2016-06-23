@@ -1,4 +1,4 @@
-from django.db.models import Sum, Count
+from django.db.models import Sum, Count, Avg
 from django.shortcuts import render
 from rest_framework.generics import GenericAPIView
 from rest_framework import serializers, mixins
@@ -101,10 +101,11 @@ class StatPeriodView(APIView):
         start_date = datetime.strptime(kwargs['start_date'], '%Y-%m-%d')
         end_date = start_date+ timedelta(days=7)
         apps = History.objects.filter(uuid=kwargs['uuid'], start_date__range=(start_date, end_date)).values('app_name').annotate(total_use=Sum('use_time')).order_by('-total_use')[0:5]
-        app_datas = []
-        print(apps)
+        graph_datas = []
+        #app별 1주일간
         for app in apps:
-            app_data = {"type" :" column"}
+            app_data = {"type" :"column"}
+
             app_data["name"] = app['app_name']
             use_times = []
             for i in range(0,7):
@@ -115,8 +116,19 @@ class StatPeriodView(APIView):
                 else:
                     use_times.append(0)
             app_data['data'] = use_times
-            app_datas.append(app_data)
-        return Response({"series":app_datas})
+            graph_datas.append(app_data)
+        #1주일간 전체 사용자의 시간 평균
+        avgs = []
+        for i in range(0, 7):
+            date = start_date + timedelta(days=i)
+            history = History.objects.filter(start_date=date).values('start_date').annotate(average=Avg('use_time'))
+            if len(history) > 0:
+                avgs.append(history[0]['average'])
+            else:
+                avgs.append(0)
+        avg_data = {"type" : "spline", "name":"Average", "data":avgs}
+        graph_datas.append(avg_data)
+        return Response({"series":graph_datas})
 
 
 class ExcludedPackageSerializer(serializers.ModelSerializer):

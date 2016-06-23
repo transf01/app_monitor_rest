@@ -49,7 +49,7 @@
                 x: -20 //center
                 },
             xAxis: {
-                categories: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
+                categories: ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'],
                 gridLineWidth: 1,
                 lineColor: '#000',
                 tickColor: '#000',
@@ -121,7 +121,7 @@
                     stacking: 'normal',
                     dataLabels: {
                         enabled: true,
-                        format: '{point.percentage:.1f}%<br>{point.y} 명',
+                        format: '{point.percentage:.1f}%<br>{point.y}',
                         color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
                         style: {
                             fontSize: '12px',
@@ -135,7 +135,8 @@
              }
         };
 
-        var url =  "stacked.html";
+        var url =  "../api/stat_graph/{{ user_id }}/date/{{ start_date|date:"Y-m-d" }}";
+        //var url =  "sample";
         $.getJSON(url,  function(data) {
             options.series = data.series;
             var chart = new Highcharts.Chart(options);

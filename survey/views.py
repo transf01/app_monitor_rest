@@ -50,6 +50,14 @@ def Confirm(request, survey_id):
 def privacy(request):
     return render(request, 'survey/privacy.html')
 
+def stat_grapth(request):
+    today = datetime.date.today()
+    monday = today - datetime.timedelta(days=today.weekday())
+    return render(request, 'graph/stacked_column_ver3.html', {'user_id':request.GET.get('user_id'), 'start_date': monday})
+
+
+def sample(request) :
+    return render(request, 'graph/stacked.html')
 # ## registration
 # def register_page(request):
 #     if request.method == 'POST':

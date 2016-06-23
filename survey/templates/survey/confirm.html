@@ -66,11 +66,7 @@
 
     <p>질문이 있으면 연제든지 연락해주세요. e-mail {{ email }} </p>
     <p>
-        {% if survey_id == '1' %}
-            <input type="button" value="확인" onclick="confirmPresurvey()" />
-        {% else %}
-            <input type="button" value="확인" onclick="confirmPostsurvey()" />
-        {% endif %}
+        <input type="button" value="확인" onclick="{% if survey_id == '1' %}confirmPresurvey() {% else %}confirmPostsurvey() {% endif %}" />
     </p>
 
     </div>
