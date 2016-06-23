@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height">
+  <script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  <style type="text/css">
+  </style>
+  <title>Smart Phone Usage Pattern</title>
+
+<script type='text/javascript'>//<![CDATA[
+
+    $(document).ready(function() {
+        var options = {
+            chart: {
+                renderTo: 'container',
+                type: 'bar',
+                backgroundColor: {
+                    linearGradient: { x1: 0, y1: 1, x2: 1, y2: 0 },
+                    stops: [
+                        [0, '#2a2a2b'],
+                        [1, '#3e3e40']
+                    ]
+                },
+                style: {
+                    fontFamily: "'Unica One', sans-serif"
+                },
+                plotBorderColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+                },
+            // json 링크
+            series: [{
+            }],
+            //차트에 그려지는 색깔을 지정 4가지로 (두개 더 넣기)
+            colors:["#aeb1b1", "#5c6666","#c0392b","#1b71a0"],
+            //제목
+            title: {
+                style: {
+                         'font-weight': "bold",
+                         color: '#f9f9f9',
+                         textTransform: 'uppercase',
+                         fontSize: '20px',
+                     },
+                text: '스마트폰 사용 패턴',
+                x: -20 //center
+                },
+            xAxis: {
+                categories: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
+                gridLineWidth: 1,
+                lineColor: '#000',
+                tickColor: '#000',
+                labels: {
+                    style: {
+                    color: '#F00',
+                    font: '11px Trebuchet MS, Verdana, sans-serif'
+                    }
+                }
+            },
+//            labels: {
+//                items: [{
+//                    html: '일주일간 누적 사용 패턴',
+//                    style: {
+//                        left: '40px',
+//                        top: '-20px',
+//                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+//                    }
+//                }]
+//            },
+            yAxis: {
+                min: 0,
+                minorTickInterval: '0',
+                lineColor: '#000',
+                lineWidth: 1,
+                tickWidth: 1,
+                tickColor: '#000',
+                title: {
+                    text: '얼마나 자주 폰을 확인하는가',
+                },
+                stackLabels: {
+                enabled: true,
+                style: {
+                    fontWeight: 'bold',
+                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray',
+                    font: '11px Trebuchet MS, Verdana, sans-serif'
+                     }
+                 }
+             },
+            //범례
+            legend: {
+                reversed: true,
+                 enabled: true,
+                 itemStyle : {
+                     fontSize: '15px',
+                     color: '#5eddd8'
+                     },
+                 itemHoverStyle: {
+                     color: '#FFF'
+                     },
+                 itemHiddenStyle: {
+                    color: '#606063'
+                    }
+                },
+            // 차트에 마우스 오버했을 때 표시되는 데이터
+            tooltip: {
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}',
+                backgroundColor: 'rgba(0, 0, 0, 0.85)',
+                style: {
+                    color: '#F0F0F0'
+                }
+            },
+            //차트위에 보여지는 데이터 설정. distance를 사용해서 위치 설정. enabled를 사용해서 숨기기 보이기를 설정
+            plotOptions: {
+                column: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.percentage:.1f}%<br>{point.y} 명',
+                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                        style: {
+                            fontSize: '12px',
+                            color: "white",
+                            textShadow: '0 0 3px black',
+                            fontWeight: "bold"
+                         },
+                         "distance": -50
+                     }
+                 }
+             }
+        };
+
+        var url =  "stacked.html";
+        $.getJSON(url,  function(data) {
+            options.series = data.series;
+            var chart = new Highcharts.Chart(options);
+            });
+        });
+
+</script>
+</head>
+
+
+
+
+<body>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+</body>
+</html>
