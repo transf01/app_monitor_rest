@@ -121,9 +121,11 @@ class StatPeriodView(APIView):
         avgs = []
         for i in range(0, 7):
             date = start_date + timedelta(days=i)
-            history = History.objects.filter(start_date=date).values('start_date').annotate(average=Avg('use_time'))
-            if len(history) > 0:
-                avgs.append(history[0]['average'])
+            all_user_history = History.objects.filter(start_date=date).values('start_date').annotate(all_user_use=Sum('use_time'))
+            users = History.objects.raw('select * from '+History._meta.db_table+' where start_date=\''+ date.date().__str__() +'\' group by start_date, uuid_id')
+
+            if len(all_user_history) > 0:
+                avgs.append(all_user_history[0]['all_user_use']/len(list(users)))
             else:
                 avgs.append(0)
         avg_data = {"type" : "spline", "name":"Average", "data":avgs}
