@@ -128,7 +128,7 @@ class StatPeriodView(APIView):
                 avgs.append(all_user_history[0]['all_user_use']/len(list(users)))
             else:
                 avgs.append(0)
-        avg_data = {"type" : "spline", "name":"Average", "data":avgs}
+        avg_data = {"type" : "spline", "name":"전체 사용자 평균", "data":avgs}
         graph_datas.append(avg_data)
         return Response({"series":graph_datas})
 
