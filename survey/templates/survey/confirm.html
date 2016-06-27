@@ -61,12 +61,12 @@
     <!-- 본문 영역 시작, 각 페이지의 컨텐츠 입니다.-->
     <div class="container">
             <div class="page-header">
-        <h2>{% if survey_id == '1' %}사전 {% else %}사후 {% endif %}설문에 참여해 주셔서 감사합니다!</h2>
+        <h2>{% if survey_id == '2' %}사전 {% else %}사후 {% endif %}설문에 참여해 주셔서 감사합니다!</h2>
       </div>
 
     <p>질문이 있으면 연제든지 연락해주세요. e-mail {{ email }} </p>
     <p>
-        <input type="button" value="확인" onclick="{% if survey_id == '1' %}confirmPresurvey() {% else %}confirmPostsurvey() {% endif %}" />
+        <input type="button" value="확인" onclick="{% if survey_id == '2' %}confirmPresurvey() {% else %}confirmPostsurvey() {% endif %}" />
     </p>
 
     </div>
