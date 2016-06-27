@@ -15,9 +15,7 @@ from django.contrib.auth.models import User
 
 
 def Index(request):
-    # received_uuid = request.GET.get('r_uuid')  ##UUID 받기
-    # print (received_uuid)   ##UUID 받아서 찍기
-    return render(request, 'survey/index.html')  # , {'received_uuid': received_uuid})
+    return render(request, 'survey/index.html')
 
 
 def SurveyDetail(request, id):
@@ -33,9 +31,6 @@ def SurveyDetail(request, id):
             return HttpResponseRedirect("/survey/confirm/%s" % id)
     else:
         form = ResponseForm(initial={'user_id': request.GET.get('user_id')}, survey=survey)
-
-        # print(form)
-        # TODO sort by category
 
     print(form)
     return render(request, 'survey/survey.html',
@@ -58,21 +53,4 @@ def stat_grapth(request):
 
 def sample(request) :
     return render(request, 'graph/stacked.html')
-# ## registration
-# def register_page(request):
-#     if request.method == 'POST':
-#         form = RegistrationForm(request.POST)
-#         if form.is_valid():
-#             user = User.objects.create_user(
-#                 username=form.cleaned_data['username'],
-#                 email=form.cleaned_data['email'],
-#                 password=form.cleaned_data['password1']
-#             )
-#             return HttpResponseRedirect('/login/')
-#     else:
-#         form = RegistrationForm()
-#
-#     variables = RequestContext(request, {
-#         'form': form
-#     })
-#     return render_to_response('registration/register.html', variables)
+

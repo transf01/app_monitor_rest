@@ -8,9 +8,8 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
 
-    <title>성인 스마트폰 중독 척도 설문</title>
+    <title>성인 스마트폰중독 척도</title>
 
     <!-- 구글 웹폰트, 나눔 고딕 -->
     <link href="http://fonts.googleapis.com/earlyaccess/nanumgothic.css" rel="stylesheet">
@@ -46,7 +45,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="http://kwak.knu.ac.kr">성인 스마트폰 중독 척도 설문</a>
+          <a class="navbar-brand" href="/survey/">성인 스마트폰중독 척도</a>
         </div>
       </div>
     </nav>
@@ -106,10 +105,12 @@
 
           <ol class="survey-questions" style="padding-left: 0px;">
           {% for category in categories %}
-            <h3 class="collapsible">설문시작<span></span></h3>
+            <h3 class="collapsible">설문 시작<span></span></h3>
+            </br>
             <div class="category-container">
             {% for field in response_form %}
               {% if field.field.widget.attrs.category == category %}
+                </br>
                 <li class="q-item" value="{% counter %}">
                     {% if field.field.required %}
                     <div class="field-wrapper question-required">
@@ -131,7 +132,7 @@
             </div>
           {% endfor %}
           </ol>
-
+          </br>
           <div class="submit-button"><input type="submit" value="완료"></div>
         </form>
 
@@ -146,7 +147,7 @@
     <script src="/static/js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="/static/js/ie10-viewport-bug-workaround.js"></script>
-    	<script src="/media/js/jquery.collapsible.js"></script>
+{#    	<script src="/media/js/jquery.collapsible.js"></script>#}
 	<script type="text/javascript">
 		$(document).ready(function() {
 			//collapsible management
