@@ -88,7 +88,7 @@ class Response(models.Model):
 
 
     def __str__(self):
-        return "response %s" % self.interview_uuid, self.user_id
+        return "response %s" % self.user_id
         # return "response %s" % self.user_id
 
 
