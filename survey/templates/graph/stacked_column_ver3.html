@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="/css/result-light.css">
   <style type="text/css">
   </style>
-  <title>Smart Phone Usage Pattern</title>
+  <title>스마트폰 사용 패턴</title>
 
 <script type='text/javascript'>//<![CDATA[
 
@@ -21,8 +21,8 @@
                 backgroundColor: {
                     linearGradient: { x1: 0, y1: 1, x2: 1, y2: 0 },
                     stops: [
-                        [0, '#2a2a2b'],
-                        [1, '#3e3e40']
+                        [0, '#EAEAEA'],
+                        [1, '#FFFFFF']
                     ]
                 },
                 style: {
@@ -36,12 +36,12 @@
             series: [{
             }],
             //차트에 그려지는 색깔을 지정 4가지로 (두개 더 넣기)
-            colors:["#aeb1b1", "#5c6666","#c0392b","#1b71a0"],
+            colors:["#7cb5ec", "#434348","#90ed7d","#e84035"],
             //제목
             title: {
                 style: {
                          'font-weight': "bold",
-                         color: '#f9f9f9',
+                         color: '#000000',
                          textTransform: 'uppercase',
                          fontSize: '20px',
                      },
@@ -55,7 +55,7 @@
                 tickColor: '#000',
                 labels: {
                     style: {
-                    color: '#F00',
+                    color: '#000',
                     font: '11px Trebuchet MS, Verdana, sans-serif'
                     }
                 }
@@ -78,7 +78,7 @@
                 tickWidth: 1,
                 tickColor: '#000',
                 title: {
-                    text: '얼마나 자주 폰을 확인하는가',
+                    text: '얼마나 많이 사용하는가',
                 },
                 stackLabels: {
                 enabled: true,
@@ -95,10 +95,10 @@
                  enabled: true,
                  itemStyle : {
                      fontSize: '15px',
-                     color: '#5eddd8'
+                     color: '#000000'
                      },
                  itemHoverStyle: {
-                     color: '#FFF'
+                     color: '#606063'
                      },
                  itemHiddenStyle: {
                     color: '#606063'
@@ -110,7 +110,7 @@
                 pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}',
                 backgroundColor: 'rgba(0, 0, 0, 0.85)',
                 style: {
-                    color: '#F0F0F0'
+                    color: '#fafafa'
                 }
             },
             //차트위에 보여지는 데이터 설정. distance를 사용해서 위치 설정. enabled를 사용해서 숨기기 보이기를 설정
