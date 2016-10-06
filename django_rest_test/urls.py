@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from app_history.views import HistoryView, UserView, HistoryByUserView, StatView, LastHistoryView, StatPeriodView, \
-    ExcludedPackageView, UserDetailView, ExperimentInfoView, ExperimentInfoDetailView
+    ExcludedPackageView, UserDetailView, ExperimentInfoView, ExperimentInfoDetailView, InterventionListView
 
 from django_rest_test import settings
 from survey import views
@@ -38,6 +38,7 @@ urlpatterns = [
     url(r'^api/excluded_package/', ExcludedPackageView.as_view()),
     url(r'^api/exp_info/$', ExperimentInfoView.as_view()),
     url(r'^api/exp_info/(?P<type>.+)$', ExperimentInfoDetailView.as_view()),
+    url(r'^api/intervention_list/(?P<uuid>.+)/date/(?P<query_date>.+)$', InterventionListView.as_view()),
 
     url(r'^graph/$', views.stat_grapth),
     url(r'^graph/sample$', views.sample),
