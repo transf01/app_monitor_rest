@@ -5,7 +5,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework import serializers, mixins
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 
 # Create your views here.
 from app_history.models import History, User, ExcludedPackage, ExperimentInfo
@@ -180,32 +180,42 @@ class ExperimentInfoView(GenericAPIView, mixins.ListModelMixin, mixins.CreateMod
 
 class InterventionListView(APIView):
     def get(self, request, *args, **kwargs):
+        uuids = ['00000000-0001-8be8-ffff-ffff923db907', '00000000-0305-a4f4-ffff-ffff95ead57d', '00000000-02a6-eec1-ffff-ffff95e8139e', '00000000-0305-63b1-ffff-ffff9aef0216', '00000000-02a4-47cc-ffff-ffffc4959620']
+        query_date = datetime.strptime(kwargs['query_date'], '%Y-%m-%d')
+        end_date = query_date - timedelta(days=1)
+
+        result = ""
+        for uuid in uuids:
+            user = User.objects.filter(uuid=uuid)[0]
+            days = (query_date.date() - user.experiment_start_date).days
+            total = History.objects.filter(uuid=uuid, start_date__range=(user.experiment_start_date, end_date)).values('uuid').annotate(total_use=Sum('use_time'))
+            oneday = History.objects.filter(uuid=uuid, start_date=query_date).values('uuid').annotate(total_use=Sum('use_time'))
+
+            if len(total) == 0 or len(oneday) == 0:
+                continue
+
+            result += '<br>' + user.name + '(' + user.cellphone+") : " + str(timedelta(seconds=round(total[0]['total_use']/days))) + " => " + str(timedelta(seconds=round(oneday[0]['total_use'])))
+        return HttpResponse(result);
+
+
+class InterventionUserView(APIView):
+    def get(self, request, *args, **kwargs):
         query_date = datetime.strptime(kwargs['query_date'], '%Y-%m-%d')
         user = User.objects.filter(uuid=kwargs['uuid'])[0]
         end_date = query_date - timedelta(days=1)
         apps = History.objects.filter(uuid=kwargs['uuid'], start_date__range=(user.experiment_start_date, end_date)).values('app_name').annotate(total_use=Sum('use_time')).order_by('-total_use')[0:5]
-        oneday = History.objects.filter(uuid=kwargs['uuid'], start_date=query_date, app_name__in=apps.values_list('app_name')).values('app_name').annotate(total_use=Sum('use_time'))
-        app_datas = []
-        #app별 1주일간
-        # for app in apps:
-        #     app_data = {"type" :"column"}
-        #
-        #     app_data["name"] = app['app_name']
-        #     use_times = []
-        #     for i in range(0,7):
-        #         date = start_date + timedelta(days=i)
-        #         history = History.objects.filter(uuid=kwargs['uuid'], start_date=date, app_name=app['app_name']).values('app_name').annotate(total_use=Sum('use_time'))
-        #         if len(history) > 0:
-        #             use_times.append(history[0]['total_use'])
-        #         else:
-        #             use_times.append(0)
-        #     app_data['data'] = use_times
-        #     app_datas.append(app_data)
+        total = History.objects.filter(uuid=kwargs['uuid'], start_date__range=(user.experiment_start_date, end_date)).values('uuid').annotate(total_use=Sum('use_time'))[0]
+        oneday = History.objects.filter(uuid=kwargs['uuid'], start_date=query_date).values('uuid').annotate(total_use=Sum('use_time'))[0]
 
-        #return Response({"app":apps, "today":oneday})
+        days = (query_date.date() - user.experiment_start_date).days
+
         result = "참가자 :" + user.name
         result += "<br>실험시작일 : " + user.experiment_start_date.__str__()
-        result += "<br> 날짜 : " + query_date.__str__()
-        result += "<br> 경과일 : " +  (query_date.date() - user.experiment_start_date).__str__()
+        result += "<br> 경과일 : " +  days.__str__()
         result += "<br> 상위 5개 1일 평균 사용량: "
+        for app in apps:
+            result += "<br>" + app['app_name']+' : '+str(timedelta(seconds=round(app['total_use']/days)))
+        result += "<br><br> 하루 평균 사용량: " + str(timedelta(seconds=round(total['total_use']/days)))
+        result += "<br><br> 날짜 : " + query_date.strftime("%Y-%m-%d")
+        result += "<br>총사용량 : " +  str(timedelta(seconds=round(oneday['total_use'])))
         return HttpResponse(result);
