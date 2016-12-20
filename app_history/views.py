@@ -195,7 +195,22 @@ class ExperimentInfoView(GenericAPIView, mixins.ListModelMixin, mixins.CreateMod
 
 class InterventionListView(APIView):
     def get(self, request, *args, **kwargs):
-        uuids = ['00000000-0001-8be8-ffff-ffff923db907', '00000000-0305-a4f4-ffff-ffff95ead57d', '00000000-02a6-eec1-ffff-ffff95e8139e', '00000000-0305-63b1-ffff-ffff9aef0216', '00000000-02a4-47cc-ffff-ffffc4959620']
+        uuids = [
+            '00000000-0305-eeb5-1835-82de565968b4',
+            '00000000-0306-3060-f2f4-7a2955ebae4c',
+            '00000000-02a4-bb8b-744d-530755c49a10',
+            '00000000-029e-bd0d-476f-d5b256176612',
+            '00000000-02da-3838-70e1-b8c955dd6ff6',
+            '00000000-02ed-d18c-f1f7-cda9560d391e',
+            '00000000-02d9-0073-ef21-0e0655a1c207',
+            '00000000-02d9-78e4-4ea3-d8b555ef3d84',
+            '00000000-0302-65e0-b6dc-9c5c5963b3af',
+            '00000000-0305-9978-1470-c0c2578bda98',
+            '00000000-02dd-b9f8-b55c-9e8378d3c079',
+            '00000000-0306-2ab4-12b2-e91278d83687',
+            '00000000-02a1-a378-421e-207256046bbd',
+            '00000000-02d7-c0e0-dabe-176e55b6a3ca',]
+
         query_date = datetime.strptime(kwargs['query_date'], '%Y-%m-%d')
         end_date = query_date - timedelta(days=1)
 
@@ -206,11 +221,24 @@ class InterventionListView(APIView):
             total = History.objects.filter(uuid=uuid, start_date__range=(user.experiment_start_date, end_date)).values('uuid').annotate(total_use=Sum('use_time'))
             oneday = History.objects.filter(uuid=uuid, start_date=query_date).values('uuid').annotate(total_use=Sum('use_time'))
 
-            if len(total) == 0 or len(oneday) == 0:
+            if len(total) == 0:
+                result += '<br>' + user.name + '(' + user.cellphone + ") : " + "사용 기록이 없습니다."
                 continue
 
-            result += '<br>' + user.name + '(' + user.cellphone+") : " + str(timedelta(seconds=round(total[0]['total_use']/days))) + " => " + str(timedelta(seconds=round(oneday[0]['total_use'])))
-        return HttpResponse(result);
+            if len(oneday) == 0:
+                result += '<br>' + user.name + '(' + user.cellphone + ") : " + "당일 사용 기록이 없습니다."
+                continue
+
+            if days < 14:
+                result += '<br>' + user.name + '(' + user.cellphone + ") : " + "실험을 시작한지 " + str(days) + "일 되었습니다."
+                continue
+
+            result += '<br> <a href="../' + uuid + '/date/' + query_date.strftime("%Y-%m-%d") + '" > '\
+                      + user.name + '(' + user.cellphone + ') </a>: ' \
+                      + str(timedelta(seconds=round(total[0]['total_use']/days))) \
+                      + " => " + str(timedelta(seconds=round(oneday[0]['total_use'])))
+
+        return HttpResponse(result)
 
 
 class InterventionUserView(APIView):
@@ -221,6 +249,7 @@ class InterventionUserView(APIView):
         apps = History.objects.filter(uuid=kwargs['uuid'], start_date__range=(user.experiment_start_date, end_date)).values('app_name').annotate(total_use=Sum('use_time')).order_by('-total_use')[0:5]
         total = History.objects.filter(uuid=kwargs['uuid'], start_date__range=(user.experiment_start_date, end_date)).values('uuid').annotate(total_use=Sum('use_time'))[0]
         oneday = History.objects.filter(uuid=kwargs['uuid'], start_date=query_date).values('uuid').annotate(total_use=Sum('use_time'))[0]
+        oneday_apps = History.objects.filter(uuid=kwargs['uuid'], start_date=query_date).values('app_name').annotate(total_use=Sum('use_time')).order_by('-total_use')[0:5]
 
         days = (query_date.date() - user.experiment_start_date).days
 
@@ -230,7 +259,9 @@ class InterventionUserView(APIView):
         result += "<br> 상위 5개 1일 평균 사용량: "
         for app in apps:
             result += "<br>" + app['app_name']+' : '+str(timedelta(seconds=round(app['total_use']/days)))
-        result += "<br><br> 하루 평균 사용량: " + str(timedelta(seconds=round(total['total_use']/days)))
-        result += "<br><br> 날짜 : " + query_date.strftime("%Y-%m-%d")
-        result += "<br>총사용량 : " +  str(timedelta(seconds=round(oneday['total_use'])))
+        result += '<br><br> <font face="Arial Black" color="blue">하루 평균 사용량: ' + str(timedelta(seconds=round(total['total_use']/days))) + '</font>'
+        result += '<br><br> <hr align=left color="red" width=200> 날짜 : ' + query_date.strftime("%Y-%m-%d")
+        result += '<br> <font face="Arial Black" color="blue"> 총사용량 : ' + str(timedelta(seconds=round(oneday['total_use']))) + '</font><br>'
+        for app in oneday_apps:
+            result += "<br>" + app['app_name']+' : '+str(timedelta(seconds=round(app['total_use'])))
         return HttpResponse(result);
