@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from app_history.views import HistoryView, UserView, HistoryByUserView, StatView, LastHistoryView, StatPeriodView, \
-    ExcludedPackageView, UserDetailView, ExperimentInfoView, ExperimentInfoDetailView, InterventionListView, InterventionUserView
+    ExcludedPackageView, UserDetailView, ExperimentInfoView, ExperimentInfoDetailView, InterventionListView, InterventionUserView, GoalView
 
 from django_rest_test import settings
 from survey import views
@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/history/$', HistoryView.as_view()),
     url(r'^api/user/$', UserView.as_view()),
+    url(r'^api/goal/$', GoalView.as_view()),
     url(r'^api/user/(?P<uuid>.+)$', UserDetailView.as_view()),
     url(r'^api/history/(?P<uuid>.+)/date/(?P<start_date>.+)/time/(?P<start_time>.+)$', HistoryByUserView.as_view()),
     url(r'^api/history/(?P<uuid>.+)/date/(?P<start_date>.+)$', HistoryByUserView.as_view()),

@@ -1,23 +1,38 @@
-from django.db.models import Sum, Count, Avg
+from django.db.models import Sum, Count
 from django.http import HttpResponse
-from django.shortcuts import render
 from rest_framework.generics import GenericAPIView
 from rest_framework import serializers, mixins
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from datetime import datetime, timedelta, time
-
-# Create your views here.
-from app_history.models import History, User, ExcludedPackage, ExperimentInfo
+from datetime import datetime, timedelta
+from app_history.models import History, User, ExcludedPackage, ExperimentInfo, Goal
 
 
 class HistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = History
 
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
+
+
+class GoalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Goal
+
+
+class GoalView(GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin):
+    queryset = Goal.objects.all()
+    serializer_class = GoalSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
 
 class HistoryView(GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin,):
     queryset = History.objects.all()

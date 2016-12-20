@@ -1,6 +1,6 @@
 from django.db import models
 
-# Create your models here.
+
 class User(models.Model):
     uuid = models.CharField(max_length=256, primary_key=True)
     name = models.CharField(max_length=256)
@@ -21,8 +21,17 @@ class History(models.Model):
         unique_together = ('uuid', 'start_date', 'start_time')
 
 
+class Goal(models.Model):
+    uuid = models.ForeignKey(User, on_delete=models.CASCADE)
+    goal_date = models.DateField();
+    confidence = models.IntegerField();
+    importance = models.IntegerField();
+    goal = models.IntegerField();
+
+
 class ExcludedPackage(models.Model):
     package_name = models.CharField(max_length=256, unique=True)
+
 
 class ExperimentInfo(models.Model):
     type = models.CharField(max_length=15, primary_key=True)
